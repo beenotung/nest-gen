@@ -31,7 +31,8 @@ scanControllerFiles(inFolder, inFile => {
     },
     () => {
       p.then(() => {
-        console.log('done.', outFile);
+        // console.log('done.', outFile);
+        console.log('saved:' + outFile.path);
       }).catch(e => {
         console.error(e);
       });
