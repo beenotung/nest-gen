@@ -3,4 +3,5 @@
 tsconfig.json
 tslint.json
 examples/
+out/
 test/
