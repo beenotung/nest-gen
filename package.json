@@ -7,6 +7,9 @@
   "license": "BSD-2-Clause",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "bin": {
+    "nest-gen": "dist/cli.js"
+  },
   "scripts": {
     "clean": "rm -rf out",
     "pretest": "npm run clean && npm run format",
@@ -17,9 +20,6 @@
     "build": "tsc",
     "rawtest": "ts-node src/cli.ts examples/server/src",
     "prepublishOnly": "npm run rawtest && npm run build"
-  },
-  "bin": {
-    "nest-gen": "dist/cli.js"
   },
   "precommit": "format",
   "devDependencies": {
