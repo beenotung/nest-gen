@@ -1,6 +1,6 @@
 {
   "name": "nest-gen",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Source code generation for Angular provider from nest.js controller.",
   "keywords": [],
   "author": "Beeno Tung <aabbcc1241@yahoo.com.hk> (https://beeno-tung.surge.sh)",
