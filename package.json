@@ -2,7 +2,12 @@
   "name": "nest-gen",
   "version": "0.0.6",
   "description": "Source code generation for Angular provider from nest.js controller.",
-  "keywords": [],
+  "keywords": [
+    "cli",
+    "code generation",
+    "nest.js",
+    "angular"
+  ],
   "author": "Beeno Tung <aabbcc1241@yahoo.com.hk> (https://beeno-tung.surge.sh)",
   "license": "BSD-2-Clause",
   "main": "dist/index.js",
