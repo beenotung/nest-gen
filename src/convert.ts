@@ -1,3 +1,14 @@
+import {
+  ClassDeclaration,
+  Generatable,
+  GENERATORS,
+  MultiLineImportRule,
+  NamedImport,
+  TypescriptCodeGenerator,
+  TypescriptGenerationOptions,
+  TypescriptParser,
+} from 'typescript-parser';
+import * as util from 'util';
 import { FileData } from './file';
 
 /**
@@ -10,6 +21,109 @@ export function parseFile(
   onLine: (line: string) => void,
   onComplete: () => void,
 ) {
+  if ('dev') {
+    const parser = new TypescriptParser();
+    parser.parseSource(controllerFile.content).then(parsed => {
+      console.log({ controllerFile });
+      parsed.imports = parsed.imports.filter(namedImport => {
+        if (!(namedImport instanceof NamedImport)) {
+          return true;
+        }
+        if (namedImport.libraryName.startsWith('..')) {
+          console.warn(`drop dependency of ${namedImport.libraryName}`);
+          return false;
+        }
+        if (namedImport.libraryName === '@nestjs/common') {
+          namedImport.specifiers = namedImport.specifiers
+            .filter(x => x.specifier !== 'HttpStatus')
+            .filter(x => x.specifier !== 'Res');
+          namedImport.libraryName = 'nest-client';
+        }
+        return true;
+      });
+      const generator = new TypescriptCodeGenerator({
+        stringQuoteStyle: "'",
+        eol: ';',
+        spaceBraces: true,
+        wrapMethod: MultiLineImportRule.oneImportPerLineOnlyAfterThreshold,
+        multiLineWrapThreshold: 4,
+        multiLineTrailingComma: true,
+        tabSize: 2,
+        insertSpaces: true,
+      });
+      console.log(util.inspect(parsed, { depth: 999 }));
+      try {
+        console.log({ GENERATORS });
+        GENERATORS[ClassDeclaration.name] = function generateClassDeclaration(
+          generatable: Generatable,
+          options: TypescriptGenerationOptions,
+        ) {
+          if (!(generatable instanceof ClassDeclaration)) {
+            throw new TypeError(
+              `expect ClassDeclaration, got: ${generatable.constructor.name}`,
+            );
+          }
+          const tab = (options.insertSpaces ? ' ' : '\t').repeat(
+            options.tabSize,
+          );
+          let res = '';
+          if (generatable.isExported) {
+            res += 'export ';
+          }
+          res += 'class ';
+          res += generatable.name;
+          res += ' {\n';
+          generatable.methods.forEach(method => {
+            res += tab;
+            if (method.visibility) {
+              res += method.visibility + ' ';
+            }
+            if (method.isStatic) {
+              res += 'static ';
+            }
+            if (method.isAbstract) {
+              res += 'abstract ';
+            }
+            if (method.isAsync) {
+              res += 'async ';
+            }
+            res += method.name;
+            res += '(';
+            res += method.parameters
+              .map(param => {
+                let res = '';
+                res += param.name;
+                if (param.type !== undefined) {
+                  res += ': ' + param.type;
+                }
+                return res;
+              })
+              .join(', ');
+            res += ')';
+            if (method.type !== undefined) {
+              res += ': ' + method.type;
+            }
+            res += '{\n';
+            res += tab + tab + 'return undefined;\n';
+            res += tab + '}\n';
+          });
+          res += '}';
+          return res;
+        };
+        let code = '';
+        parsed.imports.forEach(x => (code += generator.generate(x) + '\n'));
+        parsed.declarations.forEach(x => {
+          return (code += generator.generate(x));
+        });
+        console.log('> code <');
+        console.log(code);
+        console.log('< code >');
+      } catch (e) {
+        console.error('failed to generate code:', e);
+      }
+    });
+    return;
+  }
   // console.debug({ name: controllerFile.name });
   onLine("import { Injectable } from '@angular/core';\n");
   let s = '';

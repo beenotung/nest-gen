@@ -1,8 +1,12 @@
 import { Body, Controller, Get, HttpStatus, Param, Post, Res } from '@nestjs/common';
 import { ok } from '../utils';
 
+/**
+ * testing multiple line comment
+ * */
 @Controller('animal')
 export class AnimalController {
+  // testing one-line comment
   @Post('talk')
   async talk(@Res()res): Promise<string> {
     let data = 'this animal is talking';
