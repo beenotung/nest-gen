@@ -8,8 +8,8 @@ import { FileInfo, scanControllerFiles } from './file';
 const writeFile = util.promisify(fs.writeFile);
 const appendFile = util.promisify(fs.appendFile);
 
-const inFolder = process.argv[2] || './src';
-const outFolder = process.argv[3] || './out';
+const inFolder = process.argv[2] || 'src';
+const outFolder = process.argv[3] || 'out';
 
 function renameFile(controllerFile: string) {
   return controllerFile.replace('.controller.', '.provider.');
