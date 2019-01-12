@@ -12,7 +12,8 @@ export interface FileData extends FileInfo {
   content: string;
 }
 
-const lstat = util.promisify(fs.lstat);
+// const lstat = util.promisify(fs.lstat);
+const stat = util.promisify(fs.stat);
 const readDir = util.promisify(fs.readdir);
 const readFile = util.promisify(fs.readFile);
 const writeFile = util.promisify(fs.writeFile);
@@ -21,7 +22,7 @@ export function scanFiles(folder: string, onFile: (file: FileInfo) => void) {
   readDir(folder).then(files => {
     files.forEach(file => {
       const path = join(folder, file);
-      lstat(path).then(stats => {
+      stat(path).then(stats => {
         if (stats.isDirectory()) {
           scanFiles(path, onFile);
         } else {
