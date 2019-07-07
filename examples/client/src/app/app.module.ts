@@ -7,6 +7,7 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { AnimalProvider } from '../providers/animal/animal';
+import { FileProvider } from '../providers/file/file';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { AnimalProvider } from '../providers/animal/animal';
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
-    AnimalProvider
+    AnimalProvider,
+    FileProvider
   ]
 })
 export class AppModule {}

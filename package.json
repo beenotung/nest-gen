@@ -19,7 +19,9 @@
     "clean": "rm -rf out",
     "pretest": "npm run clean && npm run format",
     "test": "npm run rawtest",
-    "posttest": "meld out/animal/animal.provider.ts examples/client/src/providers/animal/animal.ts",
+    "posttest": "run-s posttest:*",
+    "posttest:animal": "meld out/animal/animal.provider.ts examples/client/src/providers/animal/animal.ts",
+    "posttest:file": "meld out/file/file.provider.ts examples/client/src/providers/file/file.ts",
     "format": "prettier --write \"src/**/*.ts\"",
     "postformat": "tslint -p . --fix",
     "build": "tsc",
@@ -29,6 +31,7 @@
   "precommit": "format",
   "devDependencies": {
     "@types/node": "^8.10.38",
+    "npm-run-all": "^4.1.5",
     "pre-commit": "^1.2.2",
     "prettier": "^1.15.3",
     "ts-node": "^7.0.1",
