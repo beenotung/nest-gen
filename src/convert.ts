@@ -31,7 +31,10 @@ export function parseFile(
         break;
       case '\n':
         if (/^import /.test(s)) {
-          if (s.indexOf('@nestjs/common') !== -1) {
+          if (
+            s.indexOf('@nestjs/common') !== -1 ||
+            s.indexOf('@nestjs/platform-express') !== -1
+          ) {
             // import {Body, Controller, Get, HttpStatus, Param, Post, Res} from '@nestjs/common';
             let ss = s.split('{');
             const line: string[] = [];
@@ -50,7 +53,11 @@ export function parseFile(
               return a === b ? 0 : a < b ? -1 : 1;
             });
             line.push(names.join(', '), ' }');
-            line.push(ss[1].replace('@nestjs/common', 'nest-client'));
+            line.push(
+              ss[1]
+                .replace('@nestjs/common', 'nest-client')
+                .replace('@nestjs/platform-express', 'nest-client'),
+            );
             s = line.join('');
           } else if (s.indexOf('..') !== -1) {
             console.warn('skip dependency: ' + s.replace('\n', ''));
