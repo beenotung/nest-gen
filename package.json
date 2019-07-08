@@ -1,6 +1,6 @@
 {
   "name": "nest-gen",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Source code generation for Angular provider from nest.js controller.",
   "keywords": [
     "cli",
