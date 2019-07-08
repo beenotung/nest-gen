@@ -40,7 +40,9 @@ export function parseFile(
             const names = ss[0]
               .split(',')
               .map(s => s.trim())
-              .filter(s => s !== 'Res' && s !== 'HttpStatus');
+              .filter(
+                s => s !== 'Res' && s !== 'HttpStatus' && s !== 'HttpException',
+              );
             names.push('injectNestClient');
             names.sort((a, b) => {
               a = a[0].toLowerCase();
