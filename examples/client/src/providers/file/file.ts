@@ -14,7 +14,6 @@ import {
 @Injectable()
 @Controller('file')
 export class FileProvider {
-
   constructor() {
     injectNestClient(this);
   }
