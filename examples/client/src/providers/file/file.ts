@@ -21,12 +21,12 @@ export class FileProvider {
   @Post('single')
   @UseInterceptors(FileInterceptor('file'))
   async postSingleFile(@UploadedFile() file: File): Promise<string> {
-    return undefined;
+    return undefined as any;
   }
 
   @Post('multiple')
   @UseInterceptors(FilesInterceptor('files'))
   async postMultipleFiles(@UploadedFiles() files: File[]): Promise<string[]> {
-    return undefined;
+    return undefined as any;
   }
 }
