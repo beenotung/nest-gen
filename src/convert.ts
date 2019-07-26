@@ -90,7 +90,7 @@ export function parseFile(
               .replace('@Res() res', '')
               .replace('(, ', '(');
             onLine(s);
-            onLine('  '.repeat(level) + 'return undefined;\n');
+            onLine('  '.repeat(level) + 'return undefined as any;\n');
             s = '';
           } else {
             /* not method signature line */

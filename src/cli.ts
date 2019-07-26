@@ -1,6 +1,6 @@
 #!/usr/bin/env node
+import mkdirp = require('async-mkdirp');
 import * as fs from 'fs';
-import * as makeDir from 'make-dir';
 import * as util from 'util';
 import { parseFile } from './convert';
 import { FileInfo, scanControllerFiles } from './file';
@@ -22,7 +22,7 @@ scanControllerFiles(inFolder, inFile => {
     path: renameFile(inFile.path.replace(inFolder, outFolder)),
   };
   const folderPath = outFile.path.replace(new RegExp(outFile.name + '$'), '');
-  let p = makeDir(folderPath);
+  let p = mkdirp(folderPath);
   p = p.then(() => writeFile(outFile.path, ''));
   parseFile(
     inFile,

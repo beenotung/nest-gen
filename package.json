@@ -41,7 +41,7 @@
   },
   "directories": {},
   "dependencies": {
-    "make-dir": "^1.3.0"
+    "async-mkdirp": "^1.2.7"
   },
   "repository": {
     "type": "git",
