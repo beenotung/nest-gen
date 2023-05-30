@@ -7,12 +7,17 @@ Source code generation for Angular provider from nest.js controller.
 ## Installation
 
 ```bash
-> npm i -g nest-gen
+npm i -D nest-gen
 ```
 
 ## Usage
 
 ```bash
-> cd my-nestjs-project
-> nest-gen
+# cd my-nestjs-project
+
+## for Angular Projects
+npx nest-gen --angular
+
+## for non-Angular projects
+npx nest-gen
 ```

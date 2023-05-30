@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import { Project, SourceFile } from 'ts-morph';
+import { FunctionDeclaration, Project, SourceFile } from 'ts-morph';
 
 const skipNamedImports = ['HttpException', 'HttpStatus', 'Req', 'Res'];
 const skipDecorators = ['Req', 'Res'];
@@ -8,6 +8,7 @@ const skipDecorators = ['Req', 'Res'];
 export function scanProject(options?: {
   srcDir?: string; // default 'src'
   destDir?: string; // default 'out'
+  angularInjectable?: boolean; // default false
 }) {
   const srcDir = path.resolve(
     options && options.srcDir ? options.srcDir : 'src',
@@ -92,7 +93,25 @@ export function scanProject(options?: {
       });
     }
 
+    if (options && options.angularInjectable) {
+      sourceFile.insertImportDeclaration(0, {
+        namedImports: [{ name: 'Injectable' }],
+        moduleSpecifier: '@angular/core',
+      });
+    }
+
+    sourceFile.getFunctions().forEach((functionDeclaration) => {
+      if (!functionDeclaration.isExported()) {
+        functionDeclaration.remove();
+      }
+    });
+
     sourceFile.getClasses().forEach((classDeclaration) => {
+      if (!classDeclaration.isExported()) {
+        classDeclaration.remove();
+        return;
+      }
+
       classDeclaration.getMethods().forEach((methodDeclaration) => {
         if (methodDeclaration.getScope() !== 'public') {
           methodDeclaration.remove();
@@ -105,12 +124,21 @@ export function scanProject(options?: {
       if (className && className.endsWith('Controller')) {
         ast.name = className.replace(/Controller$/, 'Client');
         classDeclaration.set(ast);
+
+        if (options && options.angularInjectable) {
+          classDeclaration.insertDecorator(0, {
+            name: 'Injectable',
+            arguments: [],
+          });
+        }
+
         classDeclaration.getConstructors().forEach((constructorDeclaration) => {
           constructorDeclaration.remove();
         });
         classDeclaration.insertConstructor(0, {
           statements: ['injectNestClient(this)'],
         });
+
         classDeclaration.getMethods().forEach((methodDeclaration) => {
           methodDeclaration.getParameters().forEach((parameterDeclaration) => {
             if (!parameterDeclaration.getTypeNode()) {

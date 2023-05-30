@@ -28,7 +28,7 @@
     "posttest:file": "meld out/file/file.provider.ts examples/client/src/providers/file/file.ts",
     "format": "prettier --write \"src/**/*.ts\"",
     "build": "tsc",
-    "rawtest": "ts-node src/cli.ts examples/server/src",
+    "rawtest": "ts-node test/index.ts examples/server/src",
     "prepublishOnly": "npm run rawtest && npm run build"
   },
   "devDependencies": {
