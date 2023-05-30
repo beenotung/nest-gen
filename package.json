@@ -15,6 +15,10 @@
   "bin": {
     "nest-gen": "dist/cli.js"
   },
+  "files": [
+    "dist/core.js",
+    "dist/cli.js"
+  ],
   "scripts": {
     "clean": "rm -rf out",
     "pretest": "npm run clean && npm run format",
