@@ -30,10 +30,10 @@
   },
   "precommit": "format",
   "devDependencies": {
-    "@types/node": "^8.10.38",
+    "@types/node": "^18.16.16",
     "npm-run-all": "^4.1.5",
     "pre-commit": "^1.2.2",
-    "prettier": "^1.15.3",
+    "prettier": "^2.8.8",
     "ts-node": "^7.0.1",
     "tslint": "^5.11.0",
     "tslint-eslint-rules": "^5.4.0",
@@ -41,7 +41,7 @@
   },
   "directories": {},
   "dependencies": {
-    "async-mkdirp": "^1.2.7"
+    "ts-morph": "^18.0.0"
   },
   "repository": {
     "type": "git",
