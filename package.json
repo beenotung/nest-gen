@@ -23,7 +23,6 @@
     "posttest:animal": "meld out/animal/animal.provider.ts examples/client/src/providers/animal/animal.ts",
     "posttest:file": "meld out/file/file.provider.ts examples/client/src/providers/file/file.ts",
     "format": "prettier --write \"src/**/*.ts\"",
-    "postformat": "tslint -p . --fix",
     "build": "tsc",
     "rawtest": "ts-node src/cli.ts examples/server/src",
     "prepublishOnly": "npm run rawtest && npm run build"
@@ -35,8 +34,6 @@
     "pre-commit": "^1.2.2",
     "prettier": "^2.8.8",
     "ts-node": "^7.0.1",
-    "tslint": "^5.11.0",
-    "tslint-eslint-rules": "^5.4.0",
     "typescript": "^3.2.1"
   },
   "directories": {},
