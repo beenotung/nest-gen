@@ -77,6 +77,7 @@ export function scanProject(options?: {
         } else {
           const destFilePath = srcFilePath.replace(srcDir, destDir);
           console.log('copy imported file:', path.relative(cwd, srcFilePath));
+          fs.mkdirSync(path.dirname(destFilePath), { recursive: true });
           fs.copyFileSync(srcFilePath, destFilePath);
         }
       }
