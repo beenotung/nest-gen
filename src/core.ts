@@ -1,8 +1,16 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import { FunctionDeclaration, Project, SourceFile } from 'ts-morph';
+import { Project, SourceFile } from 'ts-morph';
 
-const skipNamedImports = ['HttpException', 'HttpStatus', 'Req', 'Res'];
+const skipImportSpecifiers = ['express'];
+const skipNamedImports = [
+  'HttpException',
+  'HttpStatus',
+  'Req',
+  'Res',
+  'Request',
+  'Response',
+];
 const skipDecorators = ['Req', 'Res'];
 
 export function scanProject(options?: {
@@ -40,6 +48,15 @@ export function scanProject(options?: {
 
     sourceFile.getImportDeclarations().forEach((importDeclaration) => {
       const ast = importDeclaration.getStructure();
+
+      if (
+        skipImportSpecifiers.some(
+          (specifier) => ast.moduleSpecifier === specifier,
+        )
+      ) {
+        importDeclaration.remove();
+        return;
+      }
 
       if (ast.moduleSpecifier.endsWith('.service')) {
         importDeclaration.remove();
