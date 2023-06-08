@@ -1,15 +1,26 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import { FunctionDeclaration, Project, SourceFile } from 'ts-morph';
+import { Project, SourceFile } from 'ts-morph';
 
-const skipNamedImports = ['HttpException', 'HttpStatus', 'Req', 'Res'];
+const skipImportSpecifiers = ['express'];
+const skipNamedImports = [
+  'HttpException',
+  'HttpStatus',
+  'Req',
+  'Res',
+  'Request',
+  'Response',
+];
 const skipDecorators = ['Req', 'Res'];
 
 export function scanProject(options?: {
   srcDir?: string; // default 'src'
   destDir?: string; // default 'out'
   angularInjectable?: boolean; // default false
+  suffix?: string; // default 'service'
 }) {
+  const suffix = (options?.suffix || 'service').toLowerCase();
+  const Suffix = suffix.slice(0, 1).toUpperCase() + suffix.slice(1);
   const srcDir = path.resolve(
     options && options.srcDir ? options.srcDir : 'src',
   );
@@ -37,6 +48,15 @@ export function scanProject(options?: {
 
     sourceFile.getImportDeclarations().forEach((importDeclaration) => {
       const ast = importDeclaration.getStructure();
+
+      if (
+        skipImportSpecifiers.some(
+          (specifier) => ast.moduleSpecifier === specifier,
+        )
+      ) {
+        importDeclaration.remove();
+        return;
+      }
 
       if (ast.moduleSpecifier.endsWith('.service')) {
         importDeclaration.remove();
@@ -123,7 +143,7 @@ export function scanProject(options?: {
       const ast = classDeclaration.getStructure();
       const className = ast.name;
       if (className && className.endsWith('Controller')) {
-        ast.name = className.replace(/Controller$/, 'Client');
+        ast.name = className.replace(/Controller$/, Suffix);
         classDeclaration.set(ast);
 
         if (options && options.angularInjectable) {
@@ -163,7 +183,7 @@ export function scanProject(options?: {
     const srcFilePath = sourceFile.getFilePath();
     const destFilePath = srcFilePath
       .replace(srcDir, destDir)
-      .replace('.controller.', '.client.');
+      .replace('.controller.', `.${suffix}.`);
 
     fs.mkdirSync(path.dirname(destFilePath), { recursive: true });
     fs.writeFileSync(destFilePath, sourceFile.getText());
