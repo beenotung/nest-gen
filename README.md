@@ -13,13 +13,32 @@ npm i -D nest-gen
 ## Usage
 
 ```bash
-# cd my-nestjs-project
+npx nest-gen [options]
+```
+
+### CLI Options
+
+```bash
+  --angular:
+    To include angular @Injectable() above the controller class.
+    Default not activated.
+
+  --suffix <suffix>:
+    To indicate the suffix of the controller class.
+    E.g. service, client, provider, sdk
+    Default: service
+```
+
+### Usage Example
+
+```bash
+cd the-nestjs-project
 
 ## for Angular Projects
 npx nest-gen --angular
 
 ## for non-Angular projects
-npx nest-gen
+npx nest-gen --suffix client
 ```
 
 ## License
