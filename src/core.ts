@@ -180,7 +180,7 @@ export function scanProject(options?: {
     });
 
     // console.log(sourceFile.getText())
-    const srcFilePath = sourceFile.getFilePath();
+    const srcFilePath = path.resolve(sourceFile.getFilePath());
     const destFilePath = srcFilePath
       .replace(srcDir, destDir)
       .replace('.controller.', `.${suffix}.`);
