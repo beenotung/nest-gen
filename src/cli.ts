@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 import { scanProject } from './core';
 
 let srcDir: string | undefined;
